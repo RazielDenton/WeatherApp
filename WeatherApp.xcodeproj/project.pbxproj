@@ -13,6 +13,9 @@
 		100BC52E29B3907800013849 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 100BC52C29B3907800013849 /* LaunchScreen.storyboard */; };
 		10AE536729B3A1B80014AB53 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE536629B3A1B80014AB53 /* R.generated.swift */; };
 		10AE536B29B3A1D90014AB53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10AE536A29B3A1D90014AB53 /* Assets.xcassets */; };
+		10AE536F29B3BB880014AB53 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE536E29B3BB880014AB53 /* Request.swift */; };
+		10AE537129B3BBA00014AB53 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE537029B3BBA00014AB53 /* NetworkService.swift */; };
+		10AE537329B3BBB90014AB53 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE537229B3BBB90014AB53 /* Error.swift */; };
 		E243EF8697D1811EBD0A1D0C /* Pods_WeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B06BC6889FD8DDE9F38955E3 /* Pods_WeatherApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +28,9 @@
 		10AE536629B3A1B80014AB53 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		10AE536829B3A1CF0014AB53 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		10AE536A29B3A1D90014AB53 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		10AE536E29B3BB880014AB53 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		10AE537029B3BBA00014AB53 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		10AE537229B3BBB90014AB53 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		73CBF39CA744480588EB6575 /* Pods-WeatherApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.debug.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.debug.xcconfig"; sourceTree = "<group>"; };
 		B06BC6889FD8DDE9F38955E3 /* Pods_WeatherApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC30ABCC67E4EDD35A9BDBBD /* Pods-WeatherApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.release.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -85,6 +91,8 @@
 		10AE535D29B39E650014AB53 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				10AE536D29B3BB800014AB53 /* Request */,
+				10AE536C29B3BB680014AB53 /* NetworkService */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -129,6 +137,23 @@
 				10AE536629B3A1B80014AB53 /* R.generated.swift */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		10AE536C29B3BB680014AB53 /* NetworkService */ = {
+			isa = PBXGroup;
+			children = (
+				10AE537029B3BBA00014AB53 /* NetworkService.swift */,
+				10AE537229B3BBB90014AB53 /* Error.swift */,
+			);
+			path = NetworkService;
+			sourceTree = "<group>";
+		};
+		10AE536D29B3BB800014AB53 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				10AE536E29B3BB880014AB53 /* Request.swift */,
+			);
+			path = Request;
 			sourceTree = "<group>";
 		};
 		CBEF6062092DDD713F08BB5D /* Frameworks */ = {
@@ -295,7 +320,10 @@
 			files = (
 				100BC52629B3907800013849 /* ViewController.swift in Sources */,
 				100BC52229B3907800013849 /* AppDelegate.swift in Sources */,
+				10AE536F29B3BB880014AB53 /* Request.swift in Sources */,
 				100BC52429B3907800013849 /* SceneDelegate.swift in Sources */,
+				10AE537129B3BBA00014AB53 /* NetworkService.swift in Sources */,
+				10AE537329B3BBB90014AB53 /* Error.swift in Sources */,
 				10AE536729B3A1B80014AB53 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
