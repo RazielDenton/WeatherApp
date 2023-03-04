@@ -9,11 +9,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    // Dependencies
+    private let weatherService: WeatherService = WeatherService()
+
+    // UI elements
+    private let temperatureLabel: UILabel = UILabel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let someView: UIView = UIView()
-        someView.backgroundColor = .systemYellow
+        someView.backgroundColor = .white
         self.view.addSubview(someView)
         someView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -22,5 +28,26 @@ class ViewController: UIViewController {
             someView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             someView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
+
+        self.view.addSubview(temperatureLabel)
+        temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            temperatureLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            temperatureLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+        ])
+
+        getWeatherForecast()
+    }
+
+    private func getWeatherForecast() {
+        weatherService.getCurrentWeather { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let weatherForecast):
+                self.temperatureLabel.text = "\(weatherForecast.minTemp)°/ \(weatherForecast.maxTemp)°"
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
