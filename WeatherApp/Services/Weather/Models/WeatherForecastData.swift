@@ -11,6 +11,7 @@ struct WeatherForecastData {
     let timestamp: Int
     let weather: String
     let icon: String
+    let temperature: Int
     let minTemp: Int
     let maxTemp: Int
     let humidity: Int
@@ -21,6 +22,7 @@ struct WeatherForecastData {
     init(timestamp: Int,
          weather: String,
          icon: String,
+         temperature: Int,
          minTemp: Int,
          maxTemp: Int,
          humidity: Int,
@@ -28,6 +30,7 @@ struct WeatherForecastData {
         self.timestamp = timestamp
         self.weather = weather
         self.icon = icon
+        self.temperature = temperature
         self.minTemp = minTemp
         self.maxTemp = maxTemp
         self.humidity = humidity
@@ -41,6 +44,7 @@ struct WeatherForecastData {
               let weather: String = weatherData["main"] as? String,
               let icon: String = weatherData["icon"] as? String,
               let mainData: [String: Any] = dictionary["main"] as? [String: Any],
+              let temperature: Double = mainData["temp"] as? Double,
               let minTemp: Double = mainData["temp_min"] as? Double,
               let maxTemp: Double = mainData["temp_max"] as? Double,
               let humidity: Double = mainData["humidity"] as? Double,
@@ -54,6 +58,7 @@ struct WeatherForecastData {
         self.timestamp = timestamp
         self.weather = weather
         self.icon = icon
+        self.temperature = Int(temperature.rounded())
         self.minTemp = Int(minTemp.rounded())
         self.maxTemp = Int(maxTemp.rounded())
         self.humidity = Int(humidity.rounded())

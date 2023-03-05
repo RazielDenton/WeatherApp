@@ -8,18 +8,18 @@
 import Alamofire
 
 enum BaseURLType {
-    case openweather
+    case openWeather
 
     var baseURL: URL {
         switch self {
-        case .openweather:
+        case .openWeather:
             return URL(string: "https://api.openweathermap.org/data")! // swiftlint:disable:this force_unwrapping
         }
     }
 
     var apiVersion: String {
         switch self {
-        case .openweather:
+        case .openWeather:
             return "/2.5"
         }
     }
@@ -45,7 +45,7 @@ final class NetworkService: INetworkService {
     // Properties
     private let type: BaseURLType
 
-    init(type: BaseURLType = .openweather,
+    init(type: BaseURLType = .openWeather,
          requestInterceptor: RequestInterceptor? = Interceptor(),
          requestModifier: Session.RequestModifier? = nil) {
         self.type = type
