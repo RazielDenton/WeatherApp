@@ -37,18 +37,15 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
     // MARK: - IMainScreenPresenter
 
     func viewDidLoad() {
-        weatherService.getCurrentWeather { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let currentWeather):
-                self.viewModel = self.mainScreenViewModelFactory.makeViewModel(cityName: nil,
-                                                                               currentWeather: currentWeather,
-                                                                               weatherForecast: [],
-                                                                               actions: self)
-                self.view?.reloadData()
-            case .failure(let error):
-                print(error)
-            }
+        Task {
+            async let currentWeather: WeatherForecastData = getCurrentWeather()
+            async let weatherForecast: [WeatherForecastData] = getWeatherForecast()
+
+            viewModel = try await mainScreenViewModelFactory.makeViewModel(cityName: nil,
+                                                                           currentWeather: currentWeather,
+                                                                           weatherForecast: weatherForecast,
+                                                                           actions: self)
+            view?.reloadData()
         }
     }
 
@@ -64,5 +61,33 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
 
     func didTapDayForecastCell() {
         print("cell tapped")
+    }
+
+    // MARK: - Private
+
+    private func getCurrentWeather() async throws -> WeatherForecastData {
+        return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<WeatherForecastData, Error>) in
+            weatherService.getCurrentWeather { result in
+                switch result {
+                case .success(let currentWeather):
+                    continuation.resume(returning: currentWeather)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        })
+    }
+
+    private func getWeatherForecast() async throws -> [WeatherForecastData] {
+        return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<[WeatherForecastData], Error>) in
+            weatherService.getWeatherForecast { result in
+                switch result {
+                case .success(let weatherForecast):
+                    continuation.resume(returning: weatherForecast)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        })
     }
 }

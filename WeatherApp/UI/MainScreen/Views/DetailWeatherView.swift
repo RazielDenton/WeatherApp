@@ -146,9 +146,9 @@ class DetailWeatherView: UIView {
             weatherParametersStackView.bottomAnchor.constraint(equalTo: weatherParametersIconsStackView.bottomAnchor),
 
             windDirection.leadingAnchor.constraint(equalTo: weatherParametersStackView.trailingAnchor, constant: 5),
-            windDirection.centerYAnchor.constraint(equalTo: windLabel.centerYAnchor),
-            windDirection.heightAnchor.constraint(equalToConstant: 20),
-            windDirection.widthAnchor.constraint(equalToConstant: 20)
+            windDirection.centerYAnchor.constraint(equalTo: windImageView.centerYAnchor),
+            windDirection.heightAnchor.constraint(equalToConstant: 30),
+            windDirection.widthAnchor.constraint(equalToConstant: 30)
         ])
     }
 }

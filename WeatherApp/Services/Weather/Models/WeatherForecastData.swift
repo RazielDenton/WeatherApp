@@ -9,8 +9,7 @@ import Foundation
 
 struct WeatherForecastData {
     let timestamp: Int
-    let weather: String
-    let icon: String
+    let weatherConditionCode: Int
     let temperature: Int
     let minTemp: Int
     let maxTemp: Int
@@ -20,16 +19,14 @@ struct WeatherForecastData {
     // MARK: - Initialization
 
     init(timestamp: Int,
-         weather: String,
-         icon: String,
+         weatherConditionCode: Int,
          temperature: Int,
          minTemp: Int,
          maxTemp: Int,
          humidity: Int,
          wind: Wind) {
         self.timestamp = timestamp
-        self.weather = weather
-        self.icon = icon
+        self.weatherConditionCode = weatherConditionCode
         self.temperature = temperature
         self.minTemp = minTemp
         self.maxTemp = maxTemp
@@ -41,8 +38,7 @@ struct WeatherForecastData {
         guard let timestamp: Int = dictionary["dt"] as? Int,
               let weatherDataArray: [Any] = dictionary["weather"] as? [Any],
               let weatherData: [String: Any] = weatherDataArray.first as? [String: Any],
-              let weather: String = weatherData["main"] as? String,
-              let icon: String = weatherData["icon"] as? String,
+              let weatherConditionCode: Int = weatherData["id"] as? Int,
               let mainData: [String: Any] = dictionary["main"] as? [String: Any],
               let temperature: Double = mainData["temp"] as? Double,
               let minTemp: Double = mainData["temp_min"] as? Double,
@@ -56,8 +52,7 @@ struct WeatherForecastData {
         }
 
         self.timestamp = timestamp
-        self.weather = weather
-        self.icon = icon
+        self.weatherConditionCode = weatherConditionCode
         self.temperature = Int(temperature.rounded())
         self.minTemp = Int(minTemp.rounded())
         self.maxTemp = Int(maxTemp.rounded())

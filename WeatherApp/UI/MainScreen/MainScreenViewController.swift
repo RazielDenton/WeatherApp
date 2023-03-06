@@ -88,7 +88,11 @@ final class MainScreenViewController: UIViewController, IMainScreenViewControlle
     // MARK: - IMainScreenViewController
 
     func reloadData() {
-        mainScreenHeaderView.setup(with: presenter.viewModel.mainScreenHeaderViewModel)
-        detailWeatherView.setup(with: presenter.viewModel.detailWeatherViewModel)
+        DispatchQueue.main.async { [self] in
+            mainScreenHeaderView.setup(with: presenter.viewModel.mainScreenHeaderViewModel)
+            detailWeatherView.setup(with: presenter.viewModel.detailWeatherViewModel)
+            hourlyWeatherForecastView.setup(with: presenter.viewModel.hourlyWeatherViewModel)
+            dailyWeatherForecastView.setup(with: presenter.viewModel.dailyWeatherViewModel)
+        }
     }
 }

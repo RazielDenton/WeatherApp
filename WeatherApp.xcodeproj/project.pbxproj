@@ -27,6 +27,8 @@
 		10AE538C29B4874A0014AB53 /* MainScreenAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE538B29B4874A0014AB53 /* MainScreenAssembly.swift */; };
 		10AE538F29B488CF0014AB53 /* MainScreenViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE538E29B488CF0014AB53 /* MainScreenViewModelFactory.swift */; };
 		10AE539A29B4B4DB0014AB53 /* MainScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE539929B4B4DB0014AB53 /* MainScreenViewModel.swift */; };
+		10AE53A429B4C8BA0014AB53 /* DailyWeatherForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE53A329B4C8BA0014AB53 /* DailyWeatherForecastCell.swift */; };
+		10AE53A629B4C8C80014AB53 /* HourlyWeatherForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AE53A529B4C8C80014AB53 /* HourlyWeatherForecastCell.swift */; };
 		E243EF8697D1811EBD0A1D0C /* Pods_WeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B06BC6889FD8DDE9F38955E3 /* Pods_WeatherApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,8 @@
 		10AE538B29B4874A0014AB53 /* MainScreenAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenAssembly.swift; sourceTree = "<group>"; };
 		10AE538E29B488CF0014AB53 /* MainScreenViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenViewModelFactory.swift; sourceTree = "<group>"; };
 		10AE539929B4B4DB0014AB53 /* MainScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenViewModel.swift; sourceTree = "<group>"; };
+		10AE53A329B4C8BA0014AB53 /* DailyWeatherForecastCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyWeatherForecastCell.swift; sourceTree = "<group>"; };
+		10AE53A529B4C8C80014AB53 /* HourlyWeatherForecastCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HourlyWeatherForecastCell.swift; sourceTree = "<group>"; };
 		73CBF39CA744480588EB6575 /* Pods-WeatherApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.debug.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.debug.xcconfig"; sourceTree = "<group>"; };
 		B06BC6889FD8DDE9F38955E3 /* Pods_WeatherApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC30ABCC67E4EDD35A9BDBBD /* Pods-WeatherApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.release.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -208,7 +212,9 @@
 				10AE537F29B3EC2D0014AB53 /* MainScreenHeaderView.swift */,
 				10AE537D29B3EABF0014AB53 /* DetailWeatherView.swift */,
 				10AE538529B3EC610014AB53 /* HourlyWeatherForecastView.swift */,
+				10AE53A529B4C8C80014AB53 /* HourlyWeatherForecastCell.swift */,
 				10AE538129B3EC420014AB53 /* DailyWeatherForecastView.swift */,
+				10AE53A329B4C8BA0014AB53 /* DailyWeatherForecastCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -398,6 +404,7 @@
 				10AE539A29B4B4DB0014AB53 /* MainScreenViewModel.swift in Sources */,
 				10AE538229B3EC420014AB53 /* DailyWeatherForecastView.swift in Sources */,
 				10AE537829B3C7F60014AB53 /* WeatherParser.swift in Sources */,
+				10AE53A429B4C8BA0014AB53 /* DailyWeatherForecastCell.swift in Sources */,
 				100BC52629B3907800013849 /* MainScreenViewController.swift in Sources */,
 				10AE538F29B488CF0014AB53 /* MainScreenViewModelFactory.swift in Sources */,
 				10AE538C29B4874A0014AB53 /* MainScreenAssembly.swift in Sources */,
@@ -406,6 +413,7 @@
 				100BC52429B3907800013849 /* SceneDelegate.swift in Sources */,
 				10AE537129B3BBA00014AB53 /* NetworkService.swift in Sources */,
 				10AE538A29B487380014AB53 /* MainScreenPresenter.swift in Sources */,
+				10AE53A629B4C8C80014AB53 /* HourlyWeatherForecastCell.swift in Sources */,
 				10AE537329B3BBB90014AB53 /* Error.swift in Sources */,
 				10AE536729B3A1B80014AB53 /* R.generated.swift in Sources */,
 				10AE537E29B3EABF0014AB53 /* DetailWeatherView.swift in Sources */,
