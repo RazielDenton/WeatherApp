@@ -5,11 +5,9 @@
 //  Created by Raziel on 04.03.2023.
 //
 
-import Foundation
-
 protocol IWeatherService {
-    func getCurrentWeather(completion: @escaping (Result<(WeatherForecastData), Error>) -> Void)
-    func getWeatherForecast(completion: @escaping (Result<([WeatherForecastData]), Error>) -> Void)
+    func getCurrentWeather(for location: LocationModel?, completion: @escaping (Result<(WeatherForecastData), Error>) -> Void)
+    func getWeatherForecast(for location: LocationModel?, completion: @escaping (Result<([WeatherForecastData]), Error>) -> Void)
 }
 
 final class WeatherService: IWeatherService {
@@ -18,7 +16,7 @@ final class WeatherService: IWeatherService {
     private let networkService: INetworkService
     private let weatherParser: Parser
 
-    // MARK: - Properties
+    // MARK: - Initialization
 
     init(networkService: INetworkService = NetworkService(),
          weatherParser: Parser = WeatherParser()) {
@@ -28,11 +26,12 @@ final class WeatherService: IWeatherService {
 
     // MARK: - IWeatherService
 
-    func getCurrentWeather(completion: @escaping (Result<(WeatherForecastData), Error>) -> Void) {
+    func getCurrentWeather(for location: LocationModel?, completion: @escaping (Result<(WeatherForecastData), Error>) -> Void) {
         let parameters: [String: Any] = [
             "appid": "67f2837025add6d1f8b030729f0c1363",
             "units": "metric",
-            "q": "Kyiv,ua"
+            "lat": location?.latitude ?? 50.4501,
+            "lon": location?.longitude ?? 30.5234
         ]
 
         let request: Request = Request(path: "weather", method: .get, parameters: parameters)
@@ -50,11 +49,12 @@ final class WeatherService: IWeatherService {
         }
     }
 
-    func getWeatherForecast(completion: @escaping (Result<([WeatherForecastData]), Error>) -> Void) {
+    func getWeatherForecast(for location: LocationModel?, completion: @escaping (Result<([WeatherForecastData]), Error>) -> Void) {
         let parameters: [String: Any] = [
             "appid": "67f2837025add6d1f8b030729f0c1363",
             "units": "metric",
-            "q": "Kyiv,ua"
+            "lat": location?.latitude ?? 50.4501,
+            "lon": location?.longitude ?? 30.5234
         ]
 
         let request: Request = Request(path: "forecast", method: .get, parameters: parameters)

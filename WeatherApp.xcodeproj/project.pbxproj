@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		100456C729B64F5100680E2D /* MapScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100456C629B64F5100680E2D /* MapScreenViewController.swift */; };
+		100456C929B64FD600680E2D /* MainScreenRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100456C829B64FD600680E2D /* MainScreenRouter.swift */; };
+		100456CC29B6585100680E2D /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100456CB29B6585100680E2D /* LocationService.swift */; };
+		100456CF29B6A53D00680E2D /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100456CE29B6A53D00680E2D /* LocationModel.swift */; };
 		100BC52229B3907800013849 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100BC52129B3907800013849 /* AppDelegate.swift */; };
 		100BC52429B3907800013849 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100BC52329B3907800013849 /* SceneDelegate.swift */; };
 		100BC52629B3907800013849 /* MainScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100BC52529B3907800013849 /* MainScreenViewController.swift */; };
@@ -33,6 +37,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		100456C629B64F5100680E2D /* MapScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScreenViewController.swift; sourceTree = "<group>"; };
+		100456C829B64FD600680E2D /* MainScreenRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenRouter.swift; sourceTree = "<group>"; };
+		100456CB29B6585100680E2D /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		100456CE29B6A53D00680E2D /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		100BC51E29B3907800013849 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		100BC52129B3907800013849 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		100BC52329B3907800013849 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +91,31 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		100456C529B64F3A00680E2D /* MapScreen */ = {
+			isa = PBXGroup;
+			children = (
+				100456C629B64F5100680E2D /* MapScreenViewController.swift */,
+			);
+			path = MapScreen;
+			sourceTree = "<group>";
+		};
+		100456CA29B6583600680E2D /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				100456CD29B6A4DA00680E2D /* Models */,
+				100456CB29B6585100680E2D /* LocationService.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		100456CD29B6A4DA00680E2D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				100456CE29B6A53D00680E2D /* LocationModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		100BC51529B3907700013849 = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +159,7 @@
 		10AE535E29B39E6C0014AB53 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				100456CA29B6583600680E2D /* Location */,
 				10AE537429B3C7D70014AB53 /* Weather */,
 			);
 			path = Services;
@@ -136,6 +170,7 @@
 			children = (
 				10AE536129B39F8F0014AB53 /* LaunchScreen */,
 				10AE536429B3A0D20014AB53 /* MainScreen */,
+				100456C529B64F3A00680E2D /* MapScreen */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -156,6 +191,7 @@
 				10AE537C29B3EAB10014AB53 /* Views */,
 				10AE538B29B4874A0014AB53 /* MainScreenAssembly.swift */,
 				10AE538929B487380014AB53 /* MainScreenPresenter.swift */,
+				100456C829B64FD600680E2D /* MainScreenRouter.swift */,
 				100BC52529B3907800013849 /* MainScreenViewController.swift */,
 			);
 			path = MainScreen;
@@ -400,16 +436,20 @@
 				10AE537629B3C7E00014AB53 /* WeatherService.swift in Sources */,
 				10AE538629B3EC610014AB53 /* HourlyWeatherForecastView.swift in Sources */,
 				10AE537B29B3C84C0014AB53 /* WeatherForecastData.swift in Sources */,
+				100456CC29B6585100680E2D /* LocationService.swift in Sources */,
 				10AE538029B3EC2D0014AB53 /* MainScreenHeaderView.swift in Sources */,
 				10AE539A29B4B4DB0014AB53 /* MainScreenViewModel.swift in Sources */,
 				10AE538229B3EC420014AB53 /* DailyWeatherForecastView.swift in Sources */,
 				10AE537829B3C7F60014AB53 /* WeatherParser.swift in Sources */,
+				100456C929B64FD600680E2D /* MainScreenRouter.swift in Sources */,
 				10AE53A429B4C8BA0014AB53 /* DailyWeatherForecastCell.swift in Sources */,
 				100BC52629B3907800013849 /* MainScreenViewController.swift in Sources */,
 				10AE538F29B488CF0014AB53 /* MainScreenViewModelFactory.swift in Sources */,
 				10AE538C29B4874A0014AB53 /* MainScreenAssembly.swift in Sources */,
+				100456C729B64F5100680E2D /* MapScreenViewController.swift in Sources */,
 				100BC52229B3907800013849 /* AppDelegate.swift in Sources */,
 				10AE536F29B3BB880014AB53 /* Request.swift in Sources */,
+				100456CF29B6A53D00680E2D /* LocationModel.swift in Sources */,
 				100BC52429B3907800013849 /* SceneDelegate.swift in Sources */,
 				10AE537129B3BBA00014AB53 /* NetworkService.swift in Sources */,
 				10AE538A29B487380014AB53 /* MainScreenPresenter.swift in Sources */,
@@ -559,6 +599,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherApp/Resources/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location will be used to show the weather forecast for the city you are in and display your location on the map";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -588,6 +629,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherApp/Resources/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location will be used to show the weather forecast for the city you are in and display your location on the map";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";

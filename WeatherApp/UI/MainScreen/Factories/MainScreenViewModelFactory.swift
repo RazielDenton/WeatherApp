@@ -34,7 +34,7 @@ final class MainScreenViewModelFactory: IMainScreenViewModelFactory {
     private func makeMainScreenHeaderViewModel(from data: String?, actions: MainScreenViewActions?) -> MainScreenHeaderViewModel {
 
         return .init(cityNameButtonImage: R.image.ic_place(),
-                     cityName: data ?? "Оберіть місто",
+                     cityName: data ?? "Київ",
                      locationButtonImage: R.image.ic_my_location(),
                      delegate: actions)
     }

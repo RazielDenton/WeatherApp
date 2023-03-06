@@ -5,6 +5,9 @@
 //  Created by Raziel on 05.03.2023.
 //
 
+import Combine
+import Foundation
+
 protocol MainScreenViewActions: AnyObject {
     func didTapPickLocation()
     func didTapMyLocation()
@@ -20,16 +23,24 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
 
     // Dependencies
     private let weatherService: IWeatherService
+    private let locationService: ILocationService
+    private let router: IMainScreenRouter
     private let mainScreenViewModelFactory: IMainScreenViewModelFactory
     weak var view: IMainScreenViewController?
 
     // Properties
     var viewModel: MainScreenViewModel
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Initialization
 
-    init(weatherService: IWeatherService, mainScreenViewModelFactory: IMainScreenViewModelFactory) {
+    init(weatherService: IWeatherService,
+         locationService: ILocationService,
+         router: IMainScreenRouter,
+         mainScreenViewModelFactory: IMainScreenViewModelFactory) {
         self.weatherService = weatherService
+        self.locationService = locationService
+        self.router = router
         self.mainScreenViewModelFactory = mainScreenViewModelFactory
         self.viewModel = .empty
     }
@@ -37,26 +48,18 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
     // MARK: - IMainScreenPresenter
 
     func viewDidLoad() {
-        Task {
-            async let currentWeather: WeatherForecastData = getCurrentWeather()
-            async let weatherForecast: [WeatherForecastData] = getWeatherForecast()
-
-            viewModel = try await mainScreenViewModelFactory.makeViewModel(cityName: nil,
-                                                                           currentWeather: currentWeather,
-                                                                           weatherForecast: weatherForecast,
-                                                                           actions: self)
-            view?.reloadData()
-        }
+        getWeatherData(for: nil)
+        setupLocationObserver()
     }
 
     // MARK: - MainScreenViewActions
 
     func didTapPickLocation() {
-        print("open the map")
+        router.openMapScreen()
     }
 
     func didTapMyLocation() {
-        print("get weather for the current user location")
+        locationService.identifyUserLocation()
     }
 
     func didTapDayForecastCell() {
@@ -65,9 +68,24 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
 
     // MARK: - Private
 
-    private func getCurrentWeather() async throws -> WeatherForecastData {
+    private func getWeatherData(for location: LocationModel?) {
+        Task {
+            async let currentWeather: WeatherForecastData = getCurrentWeather(for: location)
+            async let weatherForecast: [WeatherForecastData] = getWeatherForecast(for: location)
+
+            viewModel = try await mainScreenViewModelFactory.makeViewModel(cityName: location?.cityName,
+                                                                           currentWeather: currentWeather,
+                                                                           weatherForecast: weatherForecast,
+                                                                           actions: self)
+            DispatchQueue.main.async { [self] in
+                view?.reloadData()
+            }
+        }
+    }
+
+    private func getCurrentWeather(for location: LocationModel?) async throws -> WeatherForecastData {
         return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<WeatherForecastData, Error>) in
-            weatherService.getCurrentWeather { result in
+            weatherService.getCurrentWeather(for: location) { result in
                 switch result {
                 case .success(let currentWeather):
                     continuation.resume(returning: currentWeather)
@@ -78,9 +96,9 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
         })
     }
 
-    private func getWeatherForecast() async throws -> [WeatherForecastData] {
+    private func getWeatherForecast(for location: LocationModel?) async throws -> [WeatherForecastData] {
         return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<[WeatherForecastData], Error>) in
-            weatherService.getWeatherForecast { result in
+            weatherService.getWeatherForecast(for: location) { result in
                 switch result {
                 case .success(let weatherForecast):
                     continuation.resume(returning: weatherForecast)
@@ -89,5 +107,14 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
                 }
             }
         })
+    }
+
+    private func setupLocationObserver() {
+        locationService.locationModelPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] locationModel in
+                guard let location: LocationModel = locationModel else { return }
+                self?.getWeatherData(for: location)
+            }.store(in: &cancellables)
     }
 }
