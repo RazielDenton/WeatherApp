@@ -8,7 +8,7 @@
 import UIKit
 
 protocol IMainScreenRouter {
-    func openMapScreen()
+    func openMapScreen(delegate: MapViewActions, locationService: ILocationService)
 }
 
 final class MainScreenRouter: IMainScreenRouter {
@@ -18,8 +18,8 @@ final class MainScreenRouter: IMainScreenRouter {
 
     // MARK: - IMainScreenRouter
 
-    func openMapScreen() {
-        let view: UIViewController = MapScreenViewController()
+    func openMapScreen(delegate: MapViewActions, locationService: ILocationService) {
+        let view: UIViewController = MapScreenViewController(delegate: delegate, locationService: locationService)
         transitionHandler?.navigationController?.pushViewController(view, animated: true)
     }
 }

@@ -14,12 +14,16 @@ protocol MainScreenViewActions: AnyObject {
     func didTapDayForecastCell()
 }
 
+protocol MapViewActions: AnyObject {
+    func citySelected(location: LocationModel)
+}
+
 protocol IMainScreenPresenter {
     var viewModel: MainScreenViewModel { get }
     func viewDidLoad()
 }
 
-final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
+final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions, MapViewActions {
 
     // Dependencies
     private let weatherService: IWeatherService
@@ -55,7 +59,7 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
     // MARK: - MainScreenViewActions
 
     func didTapPickLocation() {
-        router.openMapScreen()
+        router.openMapScreen(delegate: self, locationService: locationService)
     }
 
     func didTapMyLocation() {
@@ -64,6 +68,12 @@ final class MainScreenPresenter: IMainScreenPresenter, MainScreenViewActions {
 
     func didTapDayForecastCell() {
         print("cell tapped")
+    }
+
+    // MARK: - MapViewActions
+
+    func citySelected(location: LocationModel) {
+        getWeatherData(for: location)
     }
 
     // MARK: - Private
