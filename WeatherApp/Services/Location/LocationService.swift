@@ -6,18 +6,29 @@
 //
 
 import Combine
-import CoreLocation
+import MapKit
 
 protocol ILocationService {
     var locationModelPublisher: Published<LocationModel?>.Publisher { get }
+    var searchQuery: String { get set }
+    var searchResultsPublisher: Published<[MKLocalSearchCompletion]>.Publisher { get }
     func identifyUserLocation()
+    func setupSearchObserver()
 }
 
-final class LocationService: NSObject, CLLocationManagerDelegate, ILocationService {
+final class LocationService: NSObject, CLLocationManagerDelegate, MKLocalSearchCompleterDelegate, ILocationService {
 
     // Properties
     @Published var locationModel: LocationModel?
+    @Published var searchQuery: String = ""
+    @Published private(set) var searchResults: [MKLocalSearchCompletion] = []
+
     var locationModelPublisher: Published<LocationModel?>.Publisher { $locationModel }
+    var searchResultsPublisher: Published<[MKLocalSearchCompletion]>.Publisher { $searchResults }
+
+    private var cancellable: AnyCancellable?
+    private let searchCompleter: MKLocalSearchCompleter = MKLocalSearchCompleter()
+
     private lazy var locationManager: CLLocationManager = {
         let locationManager: CLLocationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
@@ -55,10 +66,34 @@ final class LocationService: NSObject, CLLocationManagerDelegate, ILocationServi
         print(error)
     }
 
-    // MARK: - IWeatherService
+    // MARK: - MKLocalSearchCompleterDelegate
+
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results
+    }
+
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        print(error.localizedDescription)
+    }
+
+    // MARK: - ILocationService
 
     func identifyUserLocation() {
         checkLocationAuthorization()
+    }
+
+    func setupSearchObserver() {
+        searchCompleter.delegate = self
+        cancellable = $searchQuery
+            .receive(on: DispatchQueue.main)
+            .debounce(for: .seconds(0.25), scheduler: RunLoop.main, options: nil)
+            .sink(receiveValue: { fragment in
+                if !fragment.isEmpty {
+                    self.searchCompleter.queryFragment = fragment
+                } else {
+                    self.searchResults = []
+                }
+            })
     }
 
     // MARK: - Private

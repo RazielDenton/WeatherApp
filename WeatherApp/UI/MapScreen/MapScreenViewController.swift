@@ -8,21 +8,31 @@
 import MapKit
 import Combine
 
-class MapScreenViewController: UIViewController {
+protocol IMapScreenViewController: AnyObject {
+    func search(text: String)
+}
+
+class MapScreenViewController: UIViewController, IMapScreenViewController {
 
     // Dependencies
     weak var delegate: MapViewActions?
-    private let locationService: ILocationService
+    private var locationService: ILocationService
 
     // Properties
     private var selectedCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
     private var cancellables: Set<AnyCancellable> = []
+    private let searchViewHeight: CGFloat = UIScreen.main.bounds.height * 0.4
 
     // UI elements
     private let mapView: MKMapView = MKMapView()
     private let cityDefinitionView: UIView = UIView()
     private let cityLabel: UILabel = UILabel()
     private let checkButton: UIButton = UIButton(type: .system)
+
+    private let searchView: UIView = UIView()
+    private let searchCityView: SearchCityView = SearchCityView()
+    private var searchViewHeightConstraint: NSLayoutConstraint?
+    private var searchViewBottomConstraint: NSLayoutConstraint?
 
     // MARK: - Initialization
 
@@ -44,9 +54,11 @@ class MapScreenViewController: UIViewController {
 
         setupMapView()
         setupLocationObserver()
+        setupSearchResultsObserver()
         setupCityDefinitionView()
         setupCityLabel()
         setupCheckButton()
+        setupSearch()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -81,6 +93,59 @@ class MapScreenViewController: UIViewController {
                 self?.mapView.setRegion(region, animated: true)
                 self?.mapView.showsUserLocation = true
             }.store(in: &cancellables)
+    }
+
+    private func setupSearchResultsObserver() {
+        locationService.setupSearchObserver()
+
+        locationService.searchResultsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] searchResults in
+                let searchCityViewModel: [SearchCityViewModel] = searchResults.map { SearchCityViewModel(cityName: $0.title) {
+                    print("convert row address data into the coordinates using MKLocalSearch request")
+                } }
+                self?.searchCityView.setup(with: searchCityViewModel)
+            }.store(in: &cancellables)
+    }
+
+    private func setupSearch() {
+        let panGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
+        panGesture.delaysTouchesBegan = false
+        panGesture.delaysTouchesEnded = false
+        view.addGestureRecognizer(panGesture)
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: R.image.ic_search(),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(searchButtonTapped))
+
+        searchView.backgroundColor = .white
+        searchView.layer.cornerRadius = 20
+        searchView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+
+        self.view.addSubview(searchView)
+        searchView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+
+        searchViewHeightConstraint = searchView.heightAnchor.constraint(equalToConstant: searchViewHeight)
+        searchViewBottomConstraint = searchView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: searchViewHeight)
+
+        searchViewHeightConstraint?.isActive = true
+        searchViewBottomConstraint?.isActive = true
+
+        searchCityView.delegate = self
+
+        searchView.addSubview(searchCityView)
+        searchCityView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            searchCityView.leadingAnchor.constraint(equalTo: searchView.leadingAnchor),
+            searchCityView.topAnchor.constraint(equalTo: searchView.topAnchor),
+            searchCityView.trailingAnchor.constraint(equalTo: searchView.trailingAnchor),
+            searchCityView.bottomAnchor.constraint(equalTo: searchView.bottomAnchor)
+        ])
     }
 
     private func setupCityDefinitionView() {
@@ -126,6 +191,48 @@ class MapScreenViewController: UIViewController {
         ])
     }
 
+    private func animateSearchViewPresence() {
+        let damping: CGFloat = 0.8
+        let response: CGFloat = 0.3
+        let springParameters: UISpringTimingParameters = UISpringTimingParameters(
+            mass: 1.0,
+            stiffness: pow(2 * .pi / response, 2),
+            damping: 4 * .pi * damping / response,
+            initialVelocity: .zero
+        )
+        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: springParameters)
+        animator.addAnimations {
+            self.searchViewBottomConstraint?.constant = 0
+            self.view.layoutIfNeeded()
+        }
+        animator.startAnimation()
+    }
+
+    private func animateSearchViewHiding() {
+        UIView.animate(withDuration: 0.3) {
+            self.searchViewBottomConstraint?.constant = self.searchViewHeight
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    private func animateSearchHeight() {
+        let damping: CGFloat = 0.7
+        let response: CGFloat = 0.2
+        let springParameters: UISpringTimingParameters = UISpringTimingParameters(
+            mass: 1.0,
+            stiffness: pow(2 * .pi / response, 2),
+            damping: 4 * .pi * damping / response,
+            initialVelocity: .zero
+        )
+        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: springParameters)
+        animator.addAnimations {
+            self.searchViewBottomConstraint?.constant = 0
+            self.searchViewHeightConstraint?.constant = self.searchViewHeight
+            self.view.layoutIfNeeded()
+        }
+        animator.startAnimation()
+    }
+
     // MARK: - Actions
 
     @objc func mapViewTapped(gestureReconizer: UITapGestureRecognizer) {
@@ -150,6 +257,10 @@ class MapScreenViewController: UIViewController {
         mapView.addAnnotation(annotation)
     }
 
+    @objc func searchButtonTapped() {
+        animateSearchViewPresence()
+    }
+
     @objc func checkButtonTapped() {
         guard let cityName = cityLabel.text else { return }
 
@@ -158,5 +269,34 @@ class MapScreenViewController: UIViewController {
                                                        longitude: selectedCoordinate.longitude))
 
         navigationController?.popViewController(animated: true)
+    }
+
+    @objc private func handlePanGesture(gesture: UIPanGestureRecognizer) {
+        let translation: CGPoint = gesture.translation(in: view)
+
+        switch gesture.state {
+        case .changed:
+            if translation.y > 0 {
+                searchViewBottomConstraint?.constant = translation.y
+            } else {
+                let anotherHeight: CGFloat = searchViewHeight - (translation.y * 0.1)
+                searchViewHeightConstraint?.constant = anotherHeight
+            }
+            view.layoutIfNeeded()
+        case .ended:
+            if translation.y > searchViewHeight * 0.3 {
+                animateSearchViewHiding()
+            } else {
+                animateSearchHeight()
+            }
+        default:
+            break
+        }
+    }
+
+    // MARK: - IMapScreenViewController
+
+    func search(text: String) {
+        locationService.searchQuery = text
     }
 }
